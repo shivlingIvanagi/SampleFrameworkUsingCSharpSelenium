@@ -1,0 +1,24 @@
+{
+  "validCredentials": {
+    "username": "student",
+    "password": "Password123",
+    "expectedResult": "success"
+  },
+  "invalidCredentials": [
+    {
+      "username": "invalidUser",
+      "password": "Password123",
+      "expectedError": "Your username is invalid!"
+    },
+    {
+      "username": "student",
+      "password": "wrongPassword",
+      "expectedError": "Your password is invalid!"
+    },
+    {
+      "username": "",
+      "password": "",
+      "expectedError": "Your username is invalid!"
+    }
+  ]
+}
