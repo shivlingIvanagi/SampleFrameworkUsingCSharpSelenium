@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using SeleniumExtras.WaitHelpers;
 using UIAuto.Drivers;
 using UIAuto.Utilities;
 
@@ -16,10 +17,7 @@ namespace UIAuto.Pages
             Wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(ConfigReader.GetExplicitWait()));
         }
 
-        public string GetCurrentUrl()
-        {
-            return Driver.Url;
-        }
+        public string GetCurrentUrl() => Driver.Url;
 
         public void NavigateToUrl(string url)
         {
@@ -31,12 +29,18 @@ namespace UIAuto.Pages
         {
             try
             {
-                Wait.Until(d => d.FindElement(locator)).Click();
+                var element = Wait.Until(ExpectedConditions.ElementToBeClickable(locator));
+                element.Click();
                 Logger.Info($"Clicked element: {locator}");
             }
-            catch (Exception ex)
+            catch (WebDriverTimeoutException ex)
             {
-                Logger.Error(ex, $"Failed to click element: {locator}");
+                Logger.Error(ex, $"Timeout clicking element: {locator}");
+                throw;
+            }
+            catch (NoSuchElementException ex)
+            {
+                Logger.Error(ex, $"Element not found: {locator}");
                 throw;
             }
         }
@@ -45,13 +49,19 @@ namespace UIAuto.Pages
         {
             try
             {
-                string text = Wait.Until(d => d.FindElement(locator)).Text;
+                var element = Wait.Until(ExpectedConditions.ElementIsVisible(locator));
+                string text = element.Text;
                 Logger.Info($"Retrieved text '{text}' from element: {locator}");
                 return text;
             }
-            catch (Exception ex)
+            catch (WebDriverTimeoutException ex)
             {
-                Logger.Error(ex, $"Failed to get text from element: {locator}");
+                Logger.Error(ex, $"Timeout getting text from element: {locator}");
+                throw;
+            }
+            catch (NoSuchElementException ex)
+            {
+                Logger.Error(ex, $"Element not found: {locator}");
                 throw;
             }
         }
@@ -60,9 +70,14 @@ namespace UIAuto.Pages
         {
             try
             {
-                return Wait.Until(d => d.FindElement(locator)).Displayed;
+                var element = Wait.Until(ExpectedConditions.ElementIsVisible(locator));
+                return element.Displayed;
             }
-            catch
+            catch (WebDriverTimeoutException)
+            {
+                return false;
+            }
+            catch (NoSuchElementException)
             {
                 return false;
             }
@@ -72,14 +87,19 @@ namespace UIAuto.Pages
         {
             try
             {
-                var element = Wait.Until(d => d.FindElement(locator));
+                var element = Wait.Until(ExpectedConditions.ElementIsVisible(locator));
                 element.Clear();
                 element.SendKeys(text);
                 Logger.Info($"Entered text '{text}' in element: {locator}");
             }
-            catch (Exception ex)
+            catch (WebDriverTimeoutException ex)
             {
-                Logger.Error(ex, $"Failed to enter text in element: {locator}");
+                Logger.Error(ex, $"Timeout entering text in element: {locator}");
+                throw;
+            }
+            catch (NoSuchElementException ex)
+            {
+                Logger.Error(ex, $"Element not found: {locator}");
                 throw;
             }
         }
