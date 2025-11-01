@@ -8,14 +8,14 @@ namespace UIAuto.Pages
 {
     public class BasePage
     {
-        protected IWebDriver Driver;
-        protected WebDriverWait Wait;
+        protected IWebDriver Driver => DriverManager.GetDriver();
+        protected WebDriverWait Wait => new WebDriverWait(Driver, TimeSpan.FromSeconds(ConfigReader.GetExplicitWait()));
 
-        public BasePage()
-        {
-            Driver = DriverManager.GetDriver();
-            Wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(ConfigReader.GetExplicitWait()));
-        }
+        //public BasePage()
+        //{
+        //    // Driver = DriverManager.GetDriver();
+        //    Wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(ConfigReader.GetExplicitWait()));
+        //}
 
         public string GetCurrentUrl() => Driver.Url;
 

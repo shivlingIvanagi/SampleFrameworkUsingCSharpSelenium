@@ -5,6 +5,7 @@ using UIAuto.Utilities;
 namespace UIAuto.Tests
 {
     [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class BaseTest
     {
         [OneTimeSetUp]
@@ -60,6 +61,7 @@ namespace UIAuto.Tests
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
+            DriverManager.DisposeAllDrivers();
             Logger.Info("=== Test Suite Execution Completed ===");
         }
     }

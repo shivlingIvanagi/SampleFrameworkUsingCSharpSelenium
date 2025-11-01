@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <RunConfiguration>
+    <MaxCpuCount>11</MaxCpuCount>
+    <ResultsDirectory>.\TestResults</ResultsDirectory>
+  </RunConfiguration>
+  <NUnit>
+    <NumberOfTestWorkers>3</NumberOfTestWorkers>
+    <DefaultTimeout>60000</DefaultTimeout>
+  </NUnit>
+</RunSettings>

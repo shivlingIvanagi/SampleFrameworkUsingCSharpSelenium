@@ -31,13 +31,5 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <EditorConfigFiles Remove="D:\Shivling Ivanagi\Assignment\UIAuto\UIAuto\.editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="D:\Shivling Ivanagi\Assignment\UIAuto\UIAuto\.editorconfig" />
-  </ItemGroup>
-
   </Project>
   

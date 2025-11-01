@@ -8,23 +8,23 @@ namespace UIAuto.Drivers
 {
     public sealed class DriverManager
     {
-        private static IWebDriver _driver;
+        private static ThreadLocal<IWebDriver> _driver = new ThreadLocal<IWebDriver>();
 
         private DriverManager()
         { }
 
         public static IWebDriver GetDriver()
         {
-            if (_driver == null)
+            if (_driver.Value == null)
             {
                 throw new InvalidOperationException("Driver not initialized. Call InitializeDriver first.");
             }
-            return _driver;
+            return _driver.Value;
         }
 
         public static void InitializeDriver(string browserType)
         {
-            if (_driver == null)
+            if (_driver.Value == null)
             {
                 switch (browserType.ToLower())
                 {
@@ -32,26 +32,26 @@ namespace UIAuto.Drivers
                         var chromeOptions = new ChromeOptions();
                         chromeOptions.AddArgument("--start-maximized");
                         chromeOptions.AddArgument("--disable-notifications");
-                        _driver = new ChromeDriver(chromeOptions);
+                        _driver.Value = new ChromeDriver(chromeOptions);
                         break;
 
                     case "firefox":
                         var firefoxOptions = new FirefoxOptions();
-                        _driver = new FirefoxDriver(firefoxOptions);
+                        _driver.Value = new FirefoxDriver(firefoxOptions);
                         break;
 
                     case "edge":
                         var edgeOptions = new EdgeOptions();
-                        _driver = new EdgeDriver(edgeOptions);
+                        _driver.Value = new EdgeDriver(edgeOptions);
                         break;
 
                     default:
                         throw new ArgumentException($"Browser type '{browserType}' is not supported.");
                 }
 
-                _driver.Manage().Window.Maximize();
-                _driver = new AutoHighlightDriver()
-                    .WrapDriverWithAutoHighlight(_driver);
+                _driver.Value.Manage().Window.Maximize();
+                _driver.Value = new AutoHighlightDriver()
+                    .WrapDriverWithAutoHighlight(_driver.Value);
             }
         }
 
@@ -59,8 +59,17 @@ namespace UIAuto.Drivers
         {
             if (_driver != null)
             {
-                _driver.Quit();
-                _driver = null;
+                _driver.Value.Quit();
+                _driver.Value.Dispose();
+                _driver.Value = null;
+            }
+        }
+
+        public static void DisposeAllDrivers()
+        {
+            if (_driver != null)
+            {
+                _driver.Dispose();
             }
         }
     }
