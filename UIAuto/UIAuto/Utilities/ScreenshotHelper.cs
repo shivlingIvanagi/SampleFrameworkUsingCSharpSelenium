@@ -11,15 +11,21 @@ namespace UIAuto.Utilities
         {
             try
             {
-                if (!Directory.Exists(ScreenshotPath))
+                var driver = DriverManager.GetDriver();
+                if (driver is not ITakesScreenshot screenshotDriver)
                 {
-                    Directory.CreateDirectory(ScreenshotPath);
+                    Logger.Error("Driver does not support screenshot capability");
+                    return null;
                 }
 
-                ITakesScreenshot screenshotDriver = (ITakesScreenshot)DriverManager.GetDriver();
-                Screenshot screenshot = screenshotDriver.GetScreenshot();
+                // Ensure directory exists (thread-safe)
+                Directory.CreateDirectory(ScreenshotPath);
 
-                string fileName = $"{testName}_{DateTime.Now:yyyyMMdd_HHmmss}.png";
+                var screenshot = screenshotDriver.GetScreenshot();
+
+                // Sanitize testName to remove invalid file name characters
+                string safeTestName = string.Join("_", testName.Split(Path.GetInvalidFileNameChars()));
+                string fileName = $"{safeTestName}_{DateTime.Now:yyyyMMdd_HHmmss}.png";
                 string filePath = Path.Combine(ScreenshotPath, fileName);
 
                 screenshot.SaveAsFile(filePath);

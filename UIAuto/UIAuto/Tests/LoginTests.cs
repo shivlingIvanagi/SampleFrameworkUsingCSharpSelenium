@@ -24,8 +24,8 @@ namespace UIAuto.Tests
         {
             // Arrange
             Logger.Info("Starting Test: Login with Valid Credentials");
-            string username = ConfigReader.GetValidUsername();
-            string password = ConfigReader.GetValidPassword();
+            string username = ConfigReader.ValidUsername;
+            string password = ConfigReader.ValidPassword;
 
             // Act
             _loginPage.NavigateToLoginPage();
@@ -58,8 +58,8 @@ namespace UIAuto.Tests
         {
             // Arrange
             Logger.Info("Starting Test: Login with Invalid Username");
-            string username = ConfigReader.GetInvalidUsername();
-            string password = ConfigReader.GetValidPassword();
+            string username = ConfigReader.InvalidUsername;
+            string password = ConfigReader.ValidPassword;
 
             // Act
             _loginPage.NavigateToLoginPage();
@@ -89,8 +89,8 @@ namespace UIAuto.Tests
         {
             // Arrange
             Logger.Info("Starting Test: Login with Invalid Password");
-            string username = ConfigReader.GetValidUsername();
-            string password = ConfigReader.GetInvalidPassword();
+            string username = ConfigReader.ValidUsername;
+            string password = ConfigReader.InvalidPassword;
 
             // Act
             _loginPage.NavigateToLoginPage();
@@ -120,8 +120,8 @@ namespace UIAuto.Tests
         {
             // Arrange
             Logger.Info("Starting Test: Login with Invalid Username and Password");
-            string username = ConfigReader.GetInvalidUsername();
-            string password = ConfigReader.GetInvalidPassword();
+            string username = ConfigReader.InvalidUsername;
+            string password = ConfigReader.InvalidPassword;
 
             // Act
             _loginPage.NavigateToLoginPage();
@@ -152,7 +152,7 @@ namespace UIAuto.Tests
             // Arrange
             Logger.Info("Starting Test: Login with Empty Username");
             string username = string.Empty;
-            string password = ConfigReader.GetValidPassword();
+            string password = ConfigReader.ValidPassword;
 
             // Act
             _loginPage.NavigateToLoginPage();
@@ -182,7 +182,7 @@ namespace UIAuto.Tests
         {
             // Arrange
             Logger.Info("Starting Test: Login with Empty Password");
-            string username = ConfigReader.GetValidUsername();
+            string username = ConfigReader.ValidUsername;
             string password = string.Empty;
 
             // Act
@@ -245,7 +245,7 @@ namespace UIAuto.Tests
             // Arrange
             Logger.Info("Starting Test: Login with Case Sensitive Username");
             const string username = "STUDENT"; // Using uppercase
-            string password = ConfigReader.GetValidPassword();
+            string password = ConfigReader.ValidPassword;
 
             // Act
             _loginPage.NavigateToLoginPage();
@@ -275,7 +275,7 @@ namespace UIAuto.Tests
         {
             // Arrange
             Logger.Info("Starting Test: Login with Case Sensitive Password");
-            string username = ConfigReader.GetValidUsername();
+            string username = ConfigReader.ValidUsername;
             string password = "password123"; // Using lowercase
 
             // Act
@@ -307,7 +307,7 @@ namespace UIAuto.Tests
             // Arrange
             Logger.Info("Starting Test: Login with Username Spaces");
             string username = " student "; // Username with spaces
-            string password = ConfigReader.GetValidPassword();
+            string password = ConfigReader.ValidPassword;
 
             // Act
             _loginPage.NavigateToLoginPage();
@@ -337,8 +337,8 @@ namespace UIAuto.Tests
         {
             // Arrange
             Logger.Info("Starting Test: Success Message Content Verification");
-            string username = ConfigReader.GetValidUsername();
-            string password = ConfigReader.GetValidPassword();
+            string username = ConfigReader.ValidUsername;
+            string password = ConfigReader.ValidPassword;
 
             // Act
             _loginPage.NavigateToLoginPage();

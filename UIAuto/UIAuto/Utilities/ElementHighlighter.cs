@@ -4,19 +4,18 @@ namespace UIAuto.Utilities
 {
     public class ElementHighlighter
     {
-        private IWebDriver _driver;
-        private IJavaScriptExecutor _jsExecutor;
+        private readonly IWebDriver _driver;
+        private readonly IJavaScriptExecutor _jsExecutor;
+        private const int ScrollWaitMs = 200;
 
         public ElementHighlighter(IWebDriver driver)
         {
             _driver = driver;
-            _jsExecutor = (IJavaScriptExecutor)driver;
+
+            _jsExecutor = driver as IJavaScriptExecutor ??
+                throw new ArgumentException("Driver must implement IJavaScriptExecutor for highlighting.");
         }
 
-        /// <summary>
-        /// Highlights an element with a colored border.
-        /// Default: Red border, 3px thick, 1 second duration
-        /// </summary>
         public void HighlightElement(IWebElement element, string color = "red",
             int borderWidth = 3, int durationMs = 1000, bool scrollToView = true)
         {
@@ -25,34 +24,27 @@ namespace UIAuto.Utilities
                 _jsExecutor.ExecuteScript(
                     "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center', inline: 'center'});",
                     element);
-
-                // Wait for scroll animation to complete
-                Thread.Sleep(300);
+                Thread.Sleep(ScrollWaitMs);
             }
 
-            // Store original style
-            string originalStyle = element.GetAttribute("style");
+            // Non-blocking JavaScript for highlighting
+            string highlightStyle = $"border: {borderWidth}px solid {color}; box-shadow: 0 0 10px {color};";
 
-            // Apply highlight style
-            string highlightStyle = $"border: {borderWidth}px solid {color}; " +
-                                   $"box-shadow: 0 0 10px {color};";
+            string script =
+                "var original_style = arguments[0].getAttribute('style');" +
+                "arguments[0].setAttribute('original-style', original_style);" +
+                "arguments[0].setAttribute('style', original_style + arguments[1]);" +
+                "setTimeout(function() {" +
+                    "var restored_style = arguments[0].getAttribute('original-style');" +
+                    "arguments[0].setAttribute('style', restored_style);" +
+                    "arguments[0].removeAttribute('original-style');" +
+                "}, arguments[2]);";
 
             _jsExecutor.ExecuteScript(
-                "arguments[0].setAttribute('style', arguments[1]);",
-                element, originalStyle + highlightStyle);
-
-            // Wait for specified duration
-            Thread.Sleep(durationMs);
-
-            // Restore original style
-            _jsExecutor.ExecuteScript(
-                "arguments[0].setAttribute('style', arguments[1]);",
-                element, originalStyle);
+                script,
+                element, highlightStyle, durationMs);
         }
 
-        /// <summary>
-        /// Highlights element by locator
-        /// </summary>
         public void HighlightElement(By locator, string color = "red",
             int borderWidth = 3, int durationMs = 1000)
         {
@@ -60,27 +52,13 @@ namespace UIAuto.Utilities
             HighlightElement(element, color, borderWidth, durationMs);
         }
 
-        /// <summary>
-        /// Highlights element with custom colors for different actions
-        /// </summary>
-        public void HighlightClick(IWebElement element)
-        {
-            HighlightElement(element, "blue", 4, 800);
-        }
+        // ... (HighlightClick, HighlightType, etc. methods remain the same)
+        public void HighlightClick(IWebElement element) => HighlightElement(element, "blue", 4, 800);
 
-        public void HighlightType(IWebElement element)
-        {
-            HighlightElement(element, "green", 4, 800);
-        }
+        public void HighlightType(IWebElement element) => HighlightElement(element, "green", 4, 800);
 
-        public void HighlightError(IWebElement element)
-        {
-            HighlightElement(element, "red", 5, 1500);
-        }
+        public void HighlightError(IWebElement element) => HighlightElement(element, "red", 5, 1500);
 
-        public void HighlightSuccess(IWebElement element)
-        {
-            HighlightElement(element, "lime", 4, 800);
-        }
+        public void HighlightSuccess(IWebElement element) => HighlightElement(element, "lime", 4, 800);
     }
 }

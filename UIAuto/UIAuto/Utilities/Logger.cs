@@ -8,7 +8,7 @@ namespace UIAuto.Utilities
 
         static Logger()
         {
-            string logPath = ConfigReader.GetLogPath();
+            string logPath = ConfigReader.LogPath;
             string logDirectory = Path.GetDirectoryName(logPath);
 
             if (!Directory.Exists(logDirectory))

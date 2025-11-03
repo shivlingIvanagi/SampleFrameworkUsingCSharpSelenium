@@ -5,71 +5,52 @@ namespace UIAuto.Pages
 {
     public class LoginPage : BasePage
     {
-        // Locators
         private readonly By _usernameInput = By.Id("username");
-
         private readonly By _passwordInput = By.Id("password");
         private readonly By _submitButton = By.Id("submit");
         private readonly By _successMessage = By.CssSelector(".post-title");
         private readonly By _errorMessage = By.Id("error");
         private readonly By _logoutButton = By.LinkText("Log out");
 
-        
-
         public void NavigateToLoginPage()
         {
-            string url = ConfigReader.GetBaseUrl();
-            NavigateToUrl(url);
-            Logger.Info("Navigated to Login Page");
+            string url = ConfigReader.BaseUrl;
+            NavigateToUrl(url); // Inherited from BasePage
+            Logger.Info($"Navigated to Login Page at: {url}");
         }
 
-        public void EnterUsername(string username)
+        public LoginPage EnterUsername(string username)
         {
-            SendKeys(_usernameInput, username);
+            SendKeys(_usernameInput, username); // Inherited from BasePage
+            return this;
         }
 
-        public void EnterPassword(string password)
+        public LoginPage EnterPassword(string password)
         {
-            SendKeys(_passwordInput, password);
+            SendKeys(_passwordInput, password); // Inherited from BasePage
+            return this;
         }
 
-        public void ClickSubmit()
-        {
-            Click(_submitButton);
-        }
+        public void ClickSubmit() => Click(_submitButton); // Inherited from BasePage
 
         public void Login(string username, string password)
         {
             Logger.Info($"Attempting login with username: {username}");
-            EnterUsername(username);
-            EnterPassword(password);
-            ClickSubmit();
+
+            EnterUsername(username)
+                .EnterPassword(password)
+                .ClickSubmit();
         }
 
-        public bool IsSuccessMessageDisplayed()
-        {
-            return IsElementDisplayed(_successMessage);
-        }
+        public bool IsSuccessMessageDisplayed() => IsElementDisplayed(_successMessage);
 
-        public string GetSuccessMessage()
-        {
-            return GetText(_successMessage);
-        }
+        public string GetSuccessMessage() => GetText(_successMessage);
 
-        public bool IsErrorMessageDisplayed()
-        {
-            return IsElementDisplayed(_errorMessage);
-        }
+        public bool IsErrorMessageDisplayed() => IsElementDisplayed(_errorMessage);
 
-        public string GetErrorMessage()
-        {
-            return GetText(_errorMessage);
-        }
+        public string GetErrorMessage() => GetText(_errorMessage);
 
-        public bool IsLogoutButtonDisplayed()
-        {
-            return IsElementDisplayed(_logoutButton);
-        }
+        public bool IsLogoutButtonDisplayed() => IsElementDisplayed(_logoutButton);
 
         public void ClickLogout()
         {
