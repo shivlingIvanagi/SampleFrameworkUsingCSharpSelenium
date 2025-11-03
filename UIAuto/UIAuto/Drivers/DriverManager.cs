@@ -57,10 +57,18 @@ namespace UIAuto.Drivers
 
         public static void QuitDriver()
         {
-            if (_driver != null)
+            if (_driver == null || _driver.Value == null)
+                return;
+            try
             {
-                _driver.Value.Quit();
-                _driver.Value.Dispose();
+                try { _driver.Value.Quit(); }
+                catch { /* ignore errors during Quit */ }
+
+                try { _driver.Value.Dispose(); }
+                catch { /* ignore */ }
+            }
+            finally
+            {
                 _driver.Value = null;
             }
         }
@@ -69,7 +77,12 @@ namespace UIAuto.Drivers
         {
             if (_driver != null)
             {
-                _driver.Dispose();
+                try { _driver.Dispose(); }
+                catch { /* ignore */}
+                finally
+                {
+                    _driver = null;
+                }
             }
         }
     }
