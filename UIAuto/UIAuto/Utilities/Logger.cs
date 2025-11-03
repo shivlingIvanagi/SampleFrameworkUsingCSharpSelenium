@@ -2,7 +2,7 @@
 
 namespace UIAuto.Utilities
 {
-    public class Logger
+    public static class Logger
     {
         private static ILogger _logger;
 

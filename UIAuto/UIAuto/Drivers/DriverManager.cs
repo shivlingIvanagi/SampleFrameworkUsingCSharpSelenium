@@ -57,7 +57,7 @@ namespace UIAuto.Drivers
 
         public static void QuitDriver()
         {
-            if (_driver == null || _driver.Value == null)
+            if (_driver?.Value == null)
                 return;
             try
             {

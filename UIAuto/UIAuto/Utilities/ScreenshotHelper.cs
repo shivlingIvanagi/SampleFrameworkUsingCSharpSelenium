@@ -3,9 +3,9 @@ using UIAuto.Drivers;
 
 namespace UIAuto.Utilities
 {
-    public class ScreenshotHelper
+    public static class ScreenshotHelper
     {
-        private static readonly string ScreenshotPath = "Screenshots";
+        private const string ScreenshotPath = "Screenshots";
 
         public static string CaptureScreenshot(string testName)
         {

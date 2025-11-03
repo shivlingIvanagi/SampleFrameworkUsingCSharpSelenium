@@ -14,9 +14,7 @@ namespace UIAuto.Pages
         private readonly By _errorMessage = By.Id("error");
         private readonly By _logoutButton = By.LinkText("Log out");
 
-        public LoginPage() : base()
-        {
-        }
+        
 
         public void NavigateToLoginPage()
         {

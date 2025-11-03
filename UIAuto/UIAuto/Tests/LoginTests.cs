@@ -244,7 +244,7 @@ namespace UIAuto.Tests
         {
             // Arrange
             Logger.Info("Starting Test: Login with Case Sensitive Username");
-            string username = "STUDENT"; // Using uppercase
+            const string username = "STUDENT"; // Using uppercase
             string password = ConfigReader.GetValidPassword();
 
             // Act
